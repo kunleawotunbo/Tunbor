@@ -1,6 +1,9 @@
 package com.kunleawotunbo.tunbor.controller;
 
 import com.kunleawotunbo.tunbor.bean.UserBean;
+import com.kunleawotunbo.tunbor.model.User;
+import com.kunleawotunbo.tunbor.service.MailService;
+import com.kunleawotunbo.tunbor.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import java.util.List;
@@ -9,6 +12,8 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -26,8 +31,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -37,6 +44,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 //@SessionAttributes("roles")
 @Api(value = "users", description = "Endpoint for user management")
 public class AppController {
+    
+     @Autowired
+    UserService userService;  //Service which will do all data retrieval/manipulation work
+     @Autowired
+    MailService mailService;
+    static final Logger logger = LoggerFactory.getLogger(AppController.class);
+
 
     @RequestMapping(value = {"/", "/list"}, method = RequestMethod.GET)
     public String userBean(ModelMap model) {
@@ -88,5 +102,46 @@ public class AppController {
         return new ResponseEntity<UserBean>(user, HttpStatus.OK);
     
     }
+    
+    /**
+	 * This method will provide the medium to add a new user.
+	 */
+	@RequestMapping(value = { "/newuser" }, method = RequestMethod.GET)
+	public String newUser(ModelMap model) {
+		User user = new User();
+		model.addAttribute("user", user);
+		model.addAttribute("edit", false);
+		//model.addAttribute("loggedinuser", getPrincipal());
+		return "registration";
+	}
+        
+        @RequestMapping(value = "/newuser", method = RequestMethod.POST,
+                produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+        @ResponseBody
+        public String createUser(@RequestBody User user){
+            boolean success = false;
+            userService.saveUser(user);
+            logger.info("Inside createUser");
+            
+            mailService.sendMail(user);
+            
+            return  "User successfully created";
+        }
+        
+        /**
+	 * This method returns the principal[user-name] of logged-in user.
+	 */
+	private String getPrincipal(){
+		String userName = null;
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (principal instanceof UserDetails) {
+			userName = ((UserDetails)principal).getUsername();
+		} else {
+			userName = principal.toString();
+		}
+		return userName;
+	}
+	
 
 }

@@ -1,5 +1,6 @@
 package com.kunleawotunbo.tunbor.configuration;
 
+import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -15,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
 
 
 @Configuration
@@ -86,6 +91,44 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     public void configurePathMatch(PathMatchConfigurer matcher) {
         matcher.setUseRegisteredSuffixPatternMatch(true);
     }
+    
+    /**
+     * JavaMailSender Config
+     * @return 
+     * http://websystique.com/spring/spring-4-email-using-velocity-freemaker-template-library/
+     */
+    @Bean
+    public JavaMailSender getMailSender(){
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        
+        //Using gmail
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);        
+        mailSender.setUsername("okstar45@gmail.com");
+        mailSender.setPassword("1@Yemisi");
+        
+        Properties javaMailProperties = new Properties();
+        javaMailProperties.put("mail.smtp.starttls.enable", "true");
+        javaMailProperties.put("mail.smtp.auth", "true");
+        javaMailProperties.put("mail.transport.protocol", "smtp");
+       //javaMailProperties.put("mail.debug", "true");
+        
+        mailSender.setJavaMailProperties(javaMailProperties);
+                
+        return mailSender;
+    }
+    
+    /**
+     * FreeMarker Configuration
+     * @return 
+     */
+    @Bean
+    public FreeMarkerConfigurationFactoryBean getFreeMarkerConfiguration(){
+        FreeMarkerConfigurationFactoryBean bean = new FreeMarkerConfigurationFactoryBean();
+        bean.setTemplateLoaderPath("classpath:/fmtemplates/");
+        return bean;        
+    }
 
+        
   
 }

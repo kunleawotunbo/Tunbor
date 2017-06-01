@@ -1,0 +1,11 @@
+<html>
+ 
+    <body>
+        <h3>Dear ${user.firstName}, thank you for placing order.</h3>
+ 
+        <div>
+            Your email is : ${user.email}.
+        </div>
+        <span>Sent using FreeMarker Template</span>
+    </body>
+</html> 
