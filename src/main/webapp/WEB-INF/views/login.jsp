@@ -19,8 +19,7 @@
 						<form action="${loginUrl}" method="post" class="form-horizontal">
 							<c:if test="${param.error != null}">
 								<div class="alert alert-danger">
-									<p>Invalid username or password.</p>
-                                                                    Error ::     ${param}
+									<p>Invalid username or password.</p>                                                                    
 								</div>
 							</c:if>
 							<c:if test="${param.logout != null}">
@@ -30,7 +29,7 @@
 							</c:if>
 							<div class="input-group input-sm">
 								<label class="input-group-addon" for="username"><i class="fa fa-user"></i></label>
-								<input type="text" class="form-control" id="username" name="ssoId" placeholder="Enter Username" required>
+								<input type="text" class="form-control" id="username" name="userName" placeholder="Enter Username" required>
 							</div>
 							<div class="input-group input-sm">
 								<label class="input-group-addon" for="password"><i class="fa fa-lock"></i></label> 

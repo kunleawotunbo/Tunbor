@@ -60,7 +60,7 @@ public class AppController {
         userBean.setFirstName("Olakunle");
         userBean.setLastName("Awotunbo");
         model.addAttribute("users", userBean);
-        //model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("loggedinuser", getPrincipal());
         return "userslist";
     }
 
@@ -129,11 +129,20 @@ public class AppController {
         return "User successfully created";
     }
 
-    /*
-        
-        For the security 
-        
+    /**
+     * This method returns the principal[user-name] of logged-in user.
      */
+    private String getPrincipal() {
+        String userName = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails) principal).getUsername();
+        } else {
+            userName = principal.toString();
+        }
+        return userName;
+    }
     
   
 }
