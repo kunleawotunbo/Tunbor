@@ -82,6 +82,18 @@
             <artifactId>spring-security-taglibs</artifactId>
             <version>${springsecurity.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-openid</artifactId>
+            <version>${springsecurity.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-ldap</artifactId>
+            <version>${springsecurity.version}</version>
+        </dependency>
 
 
         <!-- Hibernate -->
@@ -200,7 +212,7 @@
             <version>1.1.1</version>
         </dependency>
         
-         <dependency>
+        <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>javax.mail-api</artifactId>
             <version>1.5.5</version>
@@ -217,37 +229,18 @@
             <version>2.3.23</version>
             <scope>compile</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+        </dependency>
 
     </dependencies>
-    
-<!--    <repositories>
-        <repository>
-            <id>Tunbor</id>
-            <url>http://repo.maven.apache.org:80</url>
-            <snapshots>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
-            <releases>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-        </repository>
-    </repositories>-->
 
     <build>
         <plugins>
-            <!--            <plugin>
-                 <groupId>org.apache.maven.plugins</groupId>
-                 <artifactId>maven-compiler-plugin</artifactId>
-                 <version>3.1</version>
-                 <configuration>
-                     <source>1.7</source>
-                     <target>1.7</target>
-                     <compilerArguments>
-                         <endorseddirs>${endorsed.dir}</endorseddirs>
-                     </compilerArguments>
-                 </configuration>
-             </plugin>
-            -->
+        
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -279,31 +272,7 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
-            <!--            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${endorsed.dir}</outputDirectory>
-                            <silent>true</silent>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>javax</groupId>
-                                    <artifactId>javaee-endorsed-api</artifactId>
-                                    <version>7.0</version>
-                                    <type>jar</type>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>-->
+      
         </plugins>
     </build>
     

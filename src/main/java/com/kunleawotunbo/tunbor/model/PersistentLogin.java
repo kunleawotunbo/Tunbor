@@ -26,8 +26,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "persistent_logins")
 @NamedQueries({
-    @NamedQuery(name = "PersistentLogins.findAll", query = "SELECT p FROM PersistentLogins p")})
-public class PersistentLogins implements Serializable {
+    @NamedQuery(name = "PersistentLogin.findAll", query = "SELECT p FROM PersistentLogin p")})
+public class PersistentLogin implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -52,14 +52,14 @@ public class PersistentLogins implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUsed;
 
-    public PersistentLogins() {
+    public PersistentLogin() {
     }
 
-    public PersistentLogins(String series) {
+    public PersistentLogin(String series) {
         this.series = series;
     }
 
-    public PersistentLogins(String series, String username, String token, Date lastUsed) {
+    public PersistentLogin(String series, String username, String token, Date lastUsed) {
         this.series = series;
         this.username = username;
         this.token = token;
@@ -108,10 +108,10 @@ public class PersistentLogins implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PersistentLogins)) {
+        if (!(object instanceof PersistentLogin)) {
             return false;
         }
-        PersistentLogins other = (PersistentLogins) object;
+        PersistentLogin other = (PersistentLogin) object;
         if ((this.series == null && other.series != null) || (this.series != null && !this.series.equals(other.series))) {
             return false;
         }
@@ -120,7 +120,7 @@ public class PersistentLogins implements Serializable {
 
     @Override
     public String toString() {
-        return "com.kunleawotunbo.tunbor.model.PersistentLogins[ series=" + series + " ]";
+        return "com.kunleawotunbo.tunbor.model.PersistentLogin[ series=" + series + " ]";
     }
     
 }

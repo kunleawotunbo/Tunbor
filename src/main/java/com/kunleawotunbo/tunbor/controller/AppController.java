@@ -2,6 +2,7 @@ package com.kunleawotunbo.tunbor.controller;
 
 import com.kunleawotunbo.tunbor.bean.UserBean;
 import com.kunleawotunbo.tunbor.model.User;
+import com.kunleawotunbo.tunbor.model.UserProfile;
 import com.kunleawotunbo.tunbor.service.MailService;
 import com.kunleawotunbo.tunbor.service.UserService;
 import io.swagger.annotations.Api;
@@ -44,18 +45,18 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 //@SessionAttributes("roles")
 @Api(value = "users", description = "Endpoint for user management")
 public class AppController {
-    
-     @Autowired
-    UserService userService;  //Service which will do all data retrieval/manipulation work
-     @Autowired
-    MailService mailService;
-    static final Logger logger = LoggerFactory.getLogger(AppController.class);
 
+    @Autowired
+    UserService userService;  //Service which will do all data retrieval/manipulation work
+    @Autowired
+    MailService mailService;
+    
+    static final Logger logger = LoggerFactory.getLogger(AppController.class);
 
     @RequestMapping(value = {"/", "/list"}, method = RequestMethod.GET)
     public String userBean(ModelMap model) {
         System.out.println("Inside here");
-         UserBean userBean = new UserBean();
+        UserBean userBean = new UserBean();
         userBean.setFirstName("Olakunle");
         userBean.setLastName("Awotunbo");
         model.addAttribute("users", userBean);
@@ -86,11 +87,11 @@ public class AppController {
 
         return "ok";
     }
-    
-      //-------------------Retrieve Single User--------------------------------------------------------
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET,  produces = MediaType.APPLICATION_JSON_VALUE)
+
+    //-------------------Retrieve Single User--------------------------------------------------------
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserBean> getUser(@ApiParam(value = "testId",
-	        required = true) @PathVariable("id") long id) {
+            required = true) @PathVariable("id") long id) {
         System.out.println("Fetching User with id " + id);
         UserBean user = new UserBean();
         user.setFirstName("Olakunle");
@@ -100,48 +101,39 @@ public class AppController {
             return new ResponseEntity<UserBean>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<UserBean>(user, HttpStatus.OK);
-    
+
     }
-    
+
     /**
-	 * This method will provide the medium to add a new user.
-	 */
-	@RequestMapping(value = { "/newuser" }, method = RequestMethod.GET)
-	public String newUser(ModelMap model) {
-		User user = new User();
-		model.addAttribute("user", user);
-		model.addAttribute("edit", false);
-		//model.addAttribute("loggedinuser", getPrincipal());
-		return "registration";
-	}
-        
-        @RequestMapping(value = "/newuser", method = RequestMethod.POST,
-                produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-        @ResponseBody
-        public String createUser(@RequestBody User user){
-            boolean success = false;
-            userService.saveUser(user);
-            logger.info("Inside createUser");
-            
-            mailService.sendMail(user);
-            
-            return  "User successfully created";
-        }
-        
-        /**
-	 * This method returns the principal[user-name] of logged-in user.
-	 */
-	private String getPrincipal(){
-		String userName = null;
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+     * This method will provide the medium to add a new user.
+     */
+    @RequestMapping(value = {"/newuser"}, method = RequestMethod.GET)
+    public String newUser(ModelMap model) {
+        User user = new User();
+        model.addAttribute("user", user);
+        model.addAttribute("edit", false);
+        //model.addAttribute("loggedinuser", getPrincipal());
+        return "registration";
+    }
 
-		if (principal instanceof UserDetails) {
-			userName = ((UserDetails)principal).getUsername();
-		} else {
-			userName = principal.toString();
-		}
-		return userName;
-	}
-	
+    @RequestMapping(value = "/newuser", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String createUser(@RequestBody User user) {
+        boolean success = false;
+        userService.saveUser(user);
+        logger.info("Inside createUser");
 
+        mailService.sendMail(user);
+
+        return "User successfully created";
+    }
+
+    /*
+        
+        For the security 
+        
+     */
+    
+  
 }

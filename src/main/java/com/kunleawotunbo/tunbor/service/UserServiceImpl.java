@@ -24,8 +24,8 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserDao dao;
  
-   //@Autowired
-   //private PasswordEncoder passwordEncoder;
+   @Autowired
+   private PasswordEncoder passwordEncoder;
      
     public User findById(int id) {
         return dao.findById(id);
@@ -37,8 +37,8 @@ public class UserServiceImpl implements UserService{
     }
  
     public void saveUser(User user) {
-      //  user.setPassword(passwordEncoder.encode(user.getPassword()));
-        //dao.save(user);
+       user.setPassword(passwordEncoder.encode(user.getPassword()));
+       dao.save(user);
     }
  
     /*
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService{
         if(entity!=null){
             entity.setUserName(user.getUserName());
             if(!user.getPassword().equals(entity.getPassword())){
-              //  entity.setPassword(passwordEncoder.encode(user.getPassword()));
+               entity.setPassword(passwordEncoder.encode(user.getPassword()));
             }
             entity.setFirstName(user.getFirstName());
             entity.setLastName(user.getLastName());

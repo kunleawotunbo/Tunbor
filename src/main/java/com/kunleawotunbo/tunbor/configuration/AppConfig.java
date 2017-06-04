@@ -1,12 +1,12 @@
 package com.kunleawotunbo.tunbor.configuration;
 
+import com.kunleawotunbo.tunbor.converter.RoleToUserProfileConverter;
 import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,17 +20,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-
-
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "com.kunleawotunbo.tunbor")
+//@ComponentScan(basePackages = "com.kunleawotunbo.tunbor")
+@ComponentScan(basePackages = "com.kunleawotunbo")
 public class AppConfig extends WebMvcConfigurerAdapter {
 
-    /*
-	@Autowired
-	RoleToUserProfileConverter roleToUserProfileConverter;
-     */
+    @Autowired
+    RoleToUserProfileConverter roleToUserProfileConverter;
+
     /**
      * Configure ViewResolvers to deliver preferred views.
      */
@@ -51,25 +49,25 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
-        
+
         registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
 
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
-        
+
     }
 
     /**
      * Configure Converter to be used. In our example, we need a converter to
      * convert string values[Roles] to UserProfiles in newUser.jsp
      */
-    /*
+    
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(roleToUserProfileConverter);
     }
-     */
+    
     /**
      * Configure MessageSource to lookup any validation/error message in
      * internationalized property files
@@ -91,44 +89,44 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     public void configurePathMatch(PathMatchConfigurer matcher) {
         matcher.setUseRegisteredSuffixPatternMatch(true);
     }
-    
+
     /**
      * JavaMailSender Config
-     * @return 
+     *
+     * @return
      * http://websystique.com/spring/spring-4-email-using-velocity-freemaker-template-library/
      */
     @Bean
-    public JavaMailSender getMailSender(){
+    public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        
+
         //Using gmail
         mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);        
+        mailSender.setPort(587);
         mailSender.setUsername("okstar45@gmail.com");
         mailSender.setPassword("1@Yemisi");
-        
+
         Properties javaMailProperties = new Properties();
         javaMailProperties.put("mail.smtp.starttls.enable", "true");
         javaMailProperties.put("mail.smtp.auth", "true");
         javaMailProperties.put("mail.transport.protocol", "smtp");
-       //javaMailProperties.put("mail.debug", "true");
-        
+        //javaMailProperties.put("mail.debug", "true");
+
         mailSender.setJavaMailProperties(javaMailProperties);
-                
+
         return mailSender;
     }
-    
+
     /**
      * FreeMarker Configuration
-     * @return 
+     *
+     * @return
      */
     @Bean
-    public FreeMarkerConfigurationFactoryBean getFreeMarkerConfiguration(){
+    public FreeMarkerConfigurationFactoryBean getFreeMarkerConfiguration() {
         FreeMarkerConfigurationFactoryBean bean = new FreeMarkerConfigurationFactoryBean();
         bean.setTemplateLoaderPath("classpath:/fmtemplates/");
-        return bean;        
+        return bean;
     }
 
-        
-  
 }
