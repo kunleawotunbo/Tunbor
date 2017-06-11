@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 //@RestController
@@ -53,6 +54,7 @@ public class AppController {
     
     static final Logger logger = LoggerFactory.getLogger(AppController.class);
 
+    /*
     @RequestMapping(value = {"/", "/list"}, method = RequestMethod.GET)
     public String userBean(ModelMap model) {
         System.out.println("Inside here");
@@ -63,15 +65,22 @@ public class AppController {
         model.addAttribute("loggedinuser", getPrincipal());
         return "userslist";
     }
+    
+    */
 
-    /**
-     * This method will list all existing users.
-     */
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String login(ModelMap model) {
-        System.out.println("Inside login");
-        return "login";
-    }
+    	/**
+	 * This method will list all existing users.
+	 */
+	@RequestMapping(value = { "/", "/list" }, method = RequestMethod.GET)
+	public String listUsers(ModelMap model) {
+             System.out.println("Inside listUsers");
+		List<User> users = userService.findAllUsers();
+		model.addAttribute("users", users);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "userslist";
+	}
+
+
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String test() {
