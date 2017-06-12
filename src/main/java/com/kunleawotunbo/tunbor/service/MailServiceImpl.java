@@ -16,6 +16,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
@@ -32,6 +33,7 @@ public class MailServiceImpl implements MailService {
     @Autowired
     Configuration freemarkerConfiguration;
 
+    @Async
     public void sendMail(Object object) {
         User user = (User) object;
 
@@ -74,13 +76,13 @@ public class MailServiceImpl implements MailService {
 
     public String getFreeMarketTemplateContent(Map<String, Object> model) {
         StringBuffer content = new StringBuffer();
-      
+
         String template = "fm_mailTemplate.txt";
         try {
 
 //            content.append(FreeMarkerTemplateUtils.processTemplateIntoString(
 //                    freemarkerConfiguration.getTemplate(template), model));
-  content.append(FreeMarkerTemplateUtils.processTemplateIntoString(
+            content.append(FreeMarkerTemplateUtils.processTemplateIntoString(
                     freemarkerConfiguration.getTemplate("fm_mailTemplate.txt"), model));
             return content.toString();
         } catch (Exception e) {
@@ -88,7 +90,5 @@ public class MailServiceImpl implements MailService {
         }
         return "";
     }
-
-    
 
 }
