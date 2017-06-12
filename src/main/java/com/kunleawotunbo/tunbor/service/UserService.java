@@ -18,7 +18,7 @@ public interface UserService {
      
     User findByUsername(String username);
      
-    void saveUser(User user);
+    boolean saveUser(User user);
      
     void updateUser(User user);
      
@@ -27,5 +27,7 @@ public interface UserService {
     List<User> findAllUsers(); 
      
     boolean isUserUsernameUnique(Integer id, String username);
+    
+    public boolean isUserExist(User user);
  
 }

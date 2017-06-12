@@ -18,10 +18,20 @@ public interface UserDao {
      
     User findByUsername(String username);
      
-    void save(User user);
+    boolean save(User user);
      
     void deleteByUsername(String sso);
      
     List<User> findAllUsers();
+    
+    public boolean isUserExist(User user);
+    
+    void updateUser(User user);
+     
+    void deleteUserByUsername(String username);
+     
+    boolean isUserUsernameUnique(Integer id, String username);
+
+
  
 }

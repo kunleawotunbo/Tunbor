@@ -7,6 +7,7 @@ import com.kunleawotunbo.tunbor.service.MailService;
 import com.kunleawotunbo.tunbor.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,6 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -136,6 +139,15 @@ public class AppController {
         mailService.sendMail(user);
 
         return "User successfully created";
+    }
+    
+      @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
+    public String confirmRegistration(final Locale locale, final Model model, @RequestParam("token")
+    final String token) throws UnsupportedEncodingException {
+        System.out.println("Inside confirmRegistration");
+        model.addAttribute("message", "Account varified");
+           // return "redirect:/login?lang=" + locale.getLanguage();
+            return "redirect:/login";
     }
 
     /**

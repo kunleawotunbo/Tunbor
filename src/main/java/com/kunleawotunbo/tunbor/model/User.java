@@ -70,6 +70,9 @@ public class User implements Serializable {
     @Size(min = 1, max = 30)
     @Column(name = "phone_number")
     private String phoneNumber;
+     @Column(name = "enabled")
+     private boolean enabled;
+    
     @JoinTable(name = "user_user_profile", joinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "user_profile_id", referencedColumnName = "id")})
@@ -77,6 +80,8 @@ public class User implements Serializable {
     private List<UserProfile> userProfile;
 
     public User() {
+        super();
+        this.enabled=false;
     }
 
     public User(Integer id) {
@@ -180,6 +185,20 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "com.kunleawotunbo.tunbor.model.User[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the enabled
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * @param enabled the enabled to set
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
     
 }

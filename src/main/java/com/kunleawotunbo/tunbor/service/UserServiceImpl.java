@@ -36,9 +36,8 @@ public class UserServiceImpl implements UserService{
         return user;
     }
  
-    public void saveUser(User user) {
-       user.setPassword(passwordEncoder.encode(user.getPassword()));
-       dao.save(user);
+    public boolean saveUser(User user) {
+        return dao.save(user);
     }
  
     /*
@@ -47,6 +46,7 @@ public class UserServiceImpl implements UserService{
      * It will be updated in db once transaction ends. 
      */
     public void updateUser(User user) {
+        /*
         User entity = dao.findById(user.getId());
         if(entity!=null){
             entity.setUserName(user.getUserName());
@@ -58,6 +58,8 @@ public class UserServiceImpl implements UserService{
             entity.setEmail(user.getEmail());
             entity.setUserProfile(user.getUserProfile());
         }
+        */
+        dao.updateUser(user);
     }
  
      
@@ -70,8 +72,13 @@ public class UserServiceImpl implements UserService{
     }
  
     public boolean isUserUsernameUnique(Integer id, String username) {
-        User user = findByUsername(username);
-        return ( user == null || ((id != null) && (user.getId() == id)));
+      //  User user = findByUsername(username);
+      //  return ( user == null || ((id != null) && (user.getId() == id)));
+      return dao.isUserUsernameUnique(id, username);
+    }
+
+    public boolean isUserExist(User user) {
+        return dao.isUserExist(user);
     }
      
 }

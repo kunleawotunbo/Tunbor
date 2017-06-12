@@ -95,6 +95,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(86400).and().csrf().disable().exceptionHandling().accessDeniedPage("/Access_Denied");
     }
     
+    /* To allow Pre-flight [OPTIONS] request from browser */
      @Override
       public void configure(WebSecurity web) throws Exception {
         web.ignoring()

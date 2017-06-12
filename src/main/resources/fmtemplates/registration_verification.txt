@@ -1,0 +1,16 @@
+<html>
+ 
+    <body>
+        <h3>Dear ${user.firstName}, thank you for registering.</h3>
+ 
+        <div>
+            Your email is : ${user.email}.
+        </div>
+        <div>
+             <h3>Kindly verify your email by clicking on the link</h3>
+            <!-- userName is used for the url. testing purpose -->
+            Your email is : ${user.userName}/
+        </div>
+         <span>Thank You</span>
+    </body>
+</html> 
