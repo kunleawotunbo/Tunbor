@@ -27,6 +27,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {                                    
    // http://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
+    // access to swagger 
+    // http://localhost:8084/Tunbor/swagger-ui.html
     /*
       @Bean
     public Docket api(){

@@ -65,19 +65,16 @@ public class AppController {
 
     static final Logger logger = LoggerFactory.getLogger(AppController.class);
 
-    /*
-    @RequestMapping(value = {"/", "/list"}, method = RequestMethod.GET)
-    public String userBean(ModelMap model) {
-        System.out.println("Inside here");
-        UserBean userBean = new UserBean();
-        userBean.setFirstName("Olakunle");
-        userBean.setLastName("Awotunbo");
-        model.addAttribute("users", userBean);
-        model.addAttribute("loggedinuser", getPrincipal());
-        return "userslist";
+    
+      @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String index(ModelMap model, HttpServletRequest request) {
+        
+        model.addAttribute("urlPath", request.getLocalAddr());
+         model.addAttribute("request", request);
+
+        return "index";
     }
     
-     */
     /**
      * This method will list all existing users.
      */
@@ -97,12 +94,7 @@ public class AppController {
         return "login";
     }
     
-     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index() {
-        System.out.println("I am inside test()");
-
-        return "index";
-    }
+   
 
     //-------------------Retrieve All Users--------------------------------------------------------
     @RequestMapping(value = "/user", method = RequestMethod.GET)
