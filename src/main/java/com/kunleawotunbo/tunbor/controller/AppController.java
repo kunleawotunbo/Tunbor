@@ -5,6 +5,7 @@ import com.kunleawotunbo.tunbor.model.User;
 import com.kunleawotunbo.tunbor.model.UserProfile;
 import com.kunleawotunbo.tunbor.service.MailService;
 import com.kunleawotunbo.tunbor.service.UserService;
+import com.kunleawotunbo.tunbor.service.VerificationTokenService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import java.io.UnsupportedEncodingException;
@@ -52,9 +53,16 @@ public class AppController {
 
     @Autowired
     UserService userService;  //Service which will do all data retrieval/manipulation work
+
     @Autowired
     MailService mailService;
-    
+
+    @Autowired
+    VerificationTokenService verificationTokenService;
+
+    @Autowired
+    private MessageSource messages;
+
     static final Logger logger = LoggerFactory.getLogger(AppController.class);
 
     /*
@@ -69,27 +77,31 @@ public class AppController {
         return "userslist";
     }
     
-    */
-
-    	/**
-	 * This method will list all existing users.
-	 */
-	@RequestMapping(value = { "/", "/list" }, method = RequestMethod.GET)
-	public String listUsers(ModelMap model) {
-             System.out.println("Inside listUsers");
-		List<User> users = userService.findAllUsers();
-		model.addAttribute("users", users);
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "userslist";
-	}
-
-
+     */
+    /**
+     * This method will list all existing users.
+     */
+    @RequestMapping(value = {"/list"}, method = RequestMethod.GET)
+    public String listUsers(ModelMap model) {
+        System.out.println("Inside listUsers");
+        List<User> users = userService.findAllUsers();
+        model.addAttribute("users", users);
+        model.addAttribute("loggedinuser", getPrincipal());
+        return "userslist";
+    }
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String test() {
         System.out.println("I am inside test()");
 
         return "login";
+    }
+    
+     @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String index() {
+        System.out.println("I am inside test()");
+
+        return "index";
     }
 
     //-------------------Retrieve All Users--------------------------------------------------------
@@ -140,14 +152,37 @@ public class AppController {
 
         return "User successfully created";
     }
-    
-      @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
     public String confirmRegistration(final Locale locale, final Model model, @RequestParam("token")
-    final String token) throws UnsupportedEncodingException {
+            final String token) throws UnsupportedEncodingException {
+        /*
         System.out.println("Inside confirmRegistration");
         model.addAttribute("message", "Account varified");
            // return "redirect:/login?lang=" + locale.getLanguage();
             return "redirect:/login";
+         */
+
+        final String result = userService.validateVerificationToken(token);
+        System.out.println("result :: " + result);
+        if (result.equals("valid")) {
+            final User user = userService.getUser(token);
+            System.out.println(user);
+            if (user.isUsing2FA()) {
+                model.addAttribute("qr", userService.generateQRUrl(user));
+                return "redirect:/qrcode.html?lang=" + locale.getLanguage();
+            }
+            model.addAttribute("message", messages.getMessage("message.accountVerified", null, locale));
+            //return "redirect:/login?lang=" + locale.getLanguage();
+            return "redirect:/login";
+        }
+
+        model.addAttribute("message", messages.getMessage("auth.message." + result, null, locale));
+        //model.addAttribute("message", messages.getMess);
+        model.addAttribute("expired", "expired".equals(result));
+        model.addAttribute("token", token);
+        return "redirect:/badUser.html?lang=" + locale.getLanguage();
+
     }
 
     /**
@@ -164,6 +199,5 @@ public class AppController {
         }
         return userName;
     }
-    
-  
+
 }

@@ -22,6 +22,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.jboss.aerogear.security.otp.api.Base32;
 
 /**
  *
@@ -72,6 +73,9 @@ public class User implements Serializable {
     private String phoneNumber;
      @Column(name = "enabled")
      private boolean enabled;
+       private boolean isUsing2FA;
+
+    private String secret;
     
     @JoinTable(name = "user_user_profile", joinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
@@ -81,6 +85,7 @@ public class User implements Serializable {
 
     public User() {
         super();
+        this.secret = Base32.random();
         this.enabled=false;
     }
 
@@ -199,6 +204,34 @@ public class User implements Serializable {
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    /**
+     * @return the isUsing2FA
+     */
+    public boolean isUsing2FA() {
+        return isUsing2FA;
+    }
+
+    /**
+     * @param isUsing2FA the isUsing2FA to set
+     */
+    public void setIsUsing2FA(boolean isUsing2FA) {
+        this.isUsing2FA = isUsing2FA;
+    }
+
+    /**
+     * @return the secret
+     */
+    public String getSecret() {
+        return secret;
+    }
+
+    /**
+     * @param secret the secret to set
+     */
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
     
 }

@@ -5,7 +5,10 @@
  */
 package com.kunleawotunbo.tunbor.dao;
 
+import com.kunleawotunbo.tunbor.model.PasswordResetToken;
 import com.kunleawotunbo.tunbor.model.User;
+import com.kunleawotunbo.tunbor.model.VerificationToken;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -31,7 +34,23 @@ public interface UserDao {
     void deleteUserByUsername(String username);
      
     boolean isUserUsernameUnique(Integer id, String username);
+    
+    User getUser(String verificationToken);  
+    
 
 
+    User getUserByID(long id);
+
+    void changeUserPassword(User user, String password);
+
+    boolean checkIfValidOldPassword(User user, String password);
+
+    String validateVerificationToken(String token);
+
+    String generateQRUrl(User user) throws UnsupportedEncodingException;
+
+    User updateUser2FA(boolean use2FA);
+
+    List<String> getUsersFromSessionRegistry();
  
 }

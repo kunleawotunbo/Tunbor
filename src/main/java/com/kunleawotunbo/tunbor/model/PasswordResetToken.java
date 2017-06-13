@@ -4,19 +4,28 @@
  * and open the template in the editor.
  */
 package com.kunleawotunbo.tunbor.model;
+
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author olakunle
  */
 @Entity
-@Table(name = "Verification_Token")
-public class VerificationToken {
-    private static final int EXPIRATION = 60 * 24;
+@Table(name = "Password_Reset_Token")
+public class PasswordResetToken {
+    
+      private static final int EXPIRATION = 60 * 24;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,23 +34,24 @@ public class VerificationToken {
     private String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "user_id", referencedColumnName = "id",  foreignKey = @ForeignKey(name = "FK_VERIFY_USER"))
+    @JoinColumn(nullable = false, name = "user_id", referencedColumnName = "id")
+//    @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
     private Date expiryDate;
 
-    public VerificationToken() {
+    public PasswordResetToken() {
         super();
     }
 
-    public VerificationToken(final String token) {
+    public PasswordResetToken(final String token) {
         super();
 
         this.token = token;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 
-    public VerificationToken(final String token, final User user) {
+    public PasswordResetToken(final String token, final User user) {
         super();
 
         this.token = token;
@@ -49,6 +59,7 @@ public class VerificationToken {
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 
+    //
     public Long getId() {
         return id;
     }
@@ -112,7 +123,7 @@ public class VerificationToken {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final VerificationToken other = (VerificationToken) obj;
+        final PasswordResetToken other = (PasswordResetToken) obj;
         if (expiryDate == null) {
             if (other.expiryDate != null) {
                 return false;
@@ -143,4 +154,5 @@ public class VerificationToken {
         builder.append("Token [String=").append(token).append("]").append("[Expires").append(expiryDate).append("]");
         return builder.toString();
     }
+
 }

@@ -6,6 +6,7 @@
 package com.kunleawotunbo.tunbor.service;
 
 import com.kunleawotunbo.tunbor.model.User;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -28,6 +29,22 @@ public interface UserService {
      
     boolean isUserUsernameUnique(Integer id, String username);
     
-    public boolean isUserExist(User user);
+    public boolean isUserExist(User user);    
+    
+    User getUser(String verificationToken); 
+
+    User getUserByID(long id);
+
+    void changeUserPassword(User user, String password);
+
+    boolean checkIfValidOldPassword(User user, String password);
+
+    String validateVerificationToken(String token);
+
+    String generateQRUrl(User user) throws UnsupportedEncodingException;
+
+    User updateUser2FA(boolean use2FA);
+
+    List<String> getUsersFromSessionRegistry();
  
 }

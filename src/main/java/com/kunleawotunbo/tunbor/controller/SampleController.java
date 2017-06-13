@@ -8,11 +8,13 @@ package com.kunleawotunbo.tunbor.controller;
 import com.kunleawotunbo.tunbor.model.User;
 import com.kunleawotunbo.tunbor.service.MailService;
 import com.kunleawotunbo.tunbor.service.UserService;
+import com.kunleawotunbo.tunbor.service.VerificationTokenService;
 import com.kunleawotunbo.tunbor.utility.TunborUtility;
 import io.swagger.annotations.Api;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +43,8 @@ public class SampleController {
     MailService mailService;
     @Autowired
     TunborUtility tunborUtility;
-    //TunborUtility tunborUtility = new TunborUtility();
+    @Autowired
+    VerificationTokenService verificationTokenService;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -110,13 +113,16 @@ public class SampleController {
         user.setUserName(user.getEmail());
         created = userService.saveUser(user);
         logger.info("About to send mail to ::" + user.getEmail());
-        //mailService.sendMail(user);
         if(created){
             appUrl = request.getContextPath();
             
             try {
-                //tunborUtility.sendMail(user);
-                tunborUtility.createVerificationToken(user, getURLBase(request));
+                final String token = UUID.randomUUID().toString();
+                verificationTokenService.createVerificationTokenForUser(user, token);
+                
+                final String confirmationUrl = getURLBase(request) + "/registrationConfirm.html?token=" + token;
+                user.setUserName(confirmationUrl);
+                tunborUtility.sendMail(user);
             } catch (Exception e) {
                 e.printStackTrace();
             }

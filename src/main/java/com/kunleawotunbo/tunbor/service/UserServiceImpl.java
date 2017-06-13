@@ -7,9 +7,11 @@ package com.kunleawotunbo.tunbor.service;
 
 import com.kunleawotunbo.tunbor.dao.UserDao;
 import com.kunleawotunbo.tunbor.model.User;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,26 +20,27 @@ import org.springframework.transaction.annotation.Transactional;
  * @author olakunle
  */
 @Service("userService")
+//@Component
 @Transactional
 public class UserServiceImpl implements UserService{
  
     @Autowired
-    private UserDao dao;
+    private UserDao userDao;
  
    @Autowired
    private PasswordEncoder passwordEncoder;
      
     public User findById(int id) {
-        return dao.findById(id);
+        return userDao.findById(id);
     }
  
     public User findByUsername(String username) {
-        User user = dao.findByUsername(username);
+        User user = userDao.findByUsername(username);
         return user;
     }
  
     public boolean saveUser(User user) {
-        return dao.save(user);
+        return userDao.save(user);
     }
  
     /*
@@ -59,26 +62,58 @@ public class UserServiceImpl implements UserService{
             entity.setUserProfile(user.getUserProfile());
         }
         */
-        dao.updateUser(user);
+        userDao.updateUser(user);
     }
  
      
     public void deleteUserByUsername(String username) {
-        dao.deleteByUsername(username);
+        userDao.deleteByUsername(username);
     }
  
     public List<User> findAllUsers() {
-        return dao.findAllUsers();
+        return userDao.findAllUsers();
     }
  
     public boolean isUserUsernameUnique(Integer id, String username) {
       //  User user = findByUsername(username);
       //  return ( user == null || ((id != null) && (user.getId() == id)));
-      return dao.isUserUsernameUnique(id, username);
+      return userDao.isUserUsernameUnique(id, username);
     }
 
     public boolean isUserExist(User user) {
-        return dao.isUserExist(user);
+        return userDao.isUserExist(user);
+    }
+
+    public User getUser(String verificationToken) {
+        return userDao.getUser(verificationToken);
+    }
+
+    public User getUserByID(long id) {
+        return userDao.getUserByID(id);
+    }
+
+    public void changeUserPassword(User user, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean checkIfValidOldPassword(User user, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String validateVerificationToken(String token) {
+        return userDao.validateVerificationToken(token);
+    }
+
+    public String generateQRUrl(User user) throws UnsupportedEncodingException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public User updateUser2FA(boolean use2FA) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<String> getUsersFromSessionRegistry() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
      
 }
