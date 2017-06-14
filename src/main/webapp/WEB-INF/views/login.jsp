@@ -14,6 +14,9 @@
 		<div id="mainWrapper">
 			<div class="login-container">
 				<div class="login-card">
+                                    <div th:if="${param.error != null}"
+  th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
+
 					<div class="login-form">
 						<c:url var="loginUrl" value="/login" />
 						<form action="${loginUrl}" method="post" class="form-horizontal">

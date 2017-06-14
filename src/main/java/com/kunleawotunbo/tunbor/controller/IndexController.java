@@ -76,6 +76,7 @@ public class IndexController {
     
     @RequestMapping(value ="/logout", method = RequestMethod.GET)
     public String logoutPage(HttpServletRequest request, HttpServletResponse response){
+        logger.info("Inside logoutPage()");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             // new SecurityContextLogoutHandler().logout(request, response, auth);

@@ -22,6 +22,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -37,7 +38,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Qualifier("customUserDetailsService")
     UserDetailsService userDetailsService;
             
-    @Autowired PersistentTokenRepository tokenRepository ;
+    @Autowired
+    PersistentTokenRepository tokenRepository ;
+    
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
     
     private static String REALM="MY_TEST_REALM";
 
@@ -88,8 +93,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // Allow anonymous logins
                 //.antMatchers("/auth/**").permitAll()
                 
-                .and().formLogin().loginPage("/login")
-                .loginProcessingUrl("/login").usernameParameter("userName").passwordParameter("password").and()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/login").usernameParameter("userName").passwordParameter("password")
+                
+                  .defaultSuccessUrl("/homepage")
+                .failureUrl("/login?error=true")
+                //.successHandler(myAuthenticationSuccessHandler)
+                .failureHandler(authenticationFailureHandler)
+                
+                .and()
                 .rememberMe().rememberMeParameter("remember-me").tokenRepository(tokenRepository)
                 //.tokenValiditySeconds(86400).and().csrf().and().exceptionHandling().accessDeniedPage("/Access_Denied");
                 .tokenValiditySeconds(86400).and().csrf().disable().exceptionHandling().accessDeniedPage("/Access_Denied");

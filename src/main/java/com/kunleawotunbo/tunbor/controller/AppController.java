@@ -65,16 +65,24 @@ public class AppController {
 
     static final Logger logger = LoggerFactory.getLogger(AppController.class);
 
-    
-      @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(ModelMap model, HttpServletRequest request) {
-        
+
         model.addAttribute("urlPath", request.getLocalAddr());
-         model.addAttribute("request", request);
+        model.addAttribute("request", request);
 
         return "index";
     }
-    
+
+    @RequestMapping(value = "/homepage", method = RequestMethod.GET)
+    public String homepage(ModelMap model, HttpServletRequest request) {
+
+        model.addAttribute("urlPath", request.getLocalAddr());
+        model.addAttribute("loggedinuser", getPrincipal());
+
+        return "homepage";
+    }
+
     /**
      * This method will list all existing users.
      */
@@ -93,8 +101,6 @@ public class AppController {
 
         return "login";
     }
-    
-   
 
     //-------------------Retrieve All Users--------------------------------------------------------
     @RequestMapping(value = "/user", method = RequestMethod.GET)
